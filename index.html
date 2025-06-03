@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="http://localhost:8080/oauth2/authorization/kakao">카카오 로그인</a>
+
+    <button onclick="fetchToken()">token 불러오기</button>
+
+</body>
+<script>
+    async function fetchToken() {
+        const response = await fetch("http://localhost:8080/api/login", {
+                method : "post",
+                credentials : "include"
+            });
+        
+        console.log(await response.json());
+    }
+</script>
+</html>
