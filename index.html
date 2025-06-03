@@ -10,15 +10,64 @@
 
     <button onclick="fetchToken()">token 불러오기</button>
 
+    <button onclick="refreshToken()">token refresh</button>
+
+    <button onclick="device()">device</button>
+
 </body>
 <script>
+    const jwts = {
+        accessToken : "",
+        refreshToken : ""
+    };
+
     async function fetchToken() {
-        const response = await fetch("http://localhost:8080/api/login", {
+        const response = await fetch("http://localhost:8080/api/auth/login", {
                 method : "post",
                 credentials : "include"
             });
         
-        console.log(await response.json());
+        const data = await response.json();
+
+        console.log(data);
+
+        jwts.accessToken = data.data.accessToken;
+        jwts.refreshToken = data.data.refreshToken;
+
+        console.log(jwts.accessToken);
+        console.log(jwts.refreshToken);
+    }
+
+    async function refreshToken() {
+
+
+        const response = await fetch("http://localhost:8080/api/auth/refresh", {
+            method : "get",
+            credentials : "include",
+            headers : {
+                "Authorization" : "Bearer " + jwts.refreshToken
+            }
+        });
+
+        const data = await response.json();
+
+        jwts.accessToken = data.data.accessToken;
+        jwts.refreshToken = data.data.refreshToken;
+
+        console.log(jwts.accessToken);
+        console.log(jwts.refreshToken);
+    }
+
+    async function device() {
+        const response = await fetch("http://localhost:8080/api/device", {
+            method : "get",
+            credentials : "include",
+            headers : {
+                "Set-Cookie" : "deviceId=hahaha"
+            }
+        });
+
+        console.log(response);
     }
 </script>
 </html>
